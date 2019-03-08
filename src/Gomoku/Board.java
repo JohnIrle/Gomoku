@@ -1,6 +1,7 @@
 package Gomoku;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +24,9 @@ public class Board extends Application {
                 pane.add(board[i][j] = new Piece(), j, i);
             }
         }
+
+        pane.setPadding(new Insets(15,15,15,15));
+        pane.setStyle("-fx-background-color: beige");
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
