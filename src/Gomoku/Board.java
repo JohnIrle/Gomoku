@@ -11,12 +11,12 @@ import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 
 public class Board extends Application {
-    private char whoseTurn = 'X';
+    private String whoseTurn = "White";
     private Piece[][] board = new Piece[19][19];
     private Label lblStatus = new Label("White's turn to play");
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) {
         GridPane pane = new GridPane();
         for (int i = 0; i < 19; i++) {
             for (int j = 0; j < 19; j++) {
@@ -28,7 +28,7 @@ public class Board extends Application {
         borderPane.setCenter(pane);
         borderPane.setBottom(lblStatus);
 
-        Scene scene = new Scene(borderPane, 450, 170);
+        Scene scene = new Scene(borderPane, 600, 600);
         primaryStage.setTitle("Gomoku");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -37,7 +37,7 @@ public class Board extends Application {
     public boolean isFull() {
         for (int i = 0; i < 3; i++) {
             for (int j=0; j < 3; j++) {
-                if (board[i][j].getToken() == ' ')
+                if (board[i][j].getToken() == " ")
                     return false;
             }
         }
@@ -45,23 +45,23 @@ public class Board extends Application {
         return true;
     }
 
-    public boolean hasPlayerWon(int player) {
+    public boolean hasPlayerWon(String player) {
         return isHorizontalWin(player) || isVerticalWin(player);
 
     }
 
-    public boolean isHorizontalWin(int player) {
+    public boolean isHorizontalWin(String player) {
         for (int i = 0; i < board.length; i++) {
             int count = 0;
             for (int j = 0; j < board[i].length; j++) {
-                if (player == 1) {
-                    if (board[i][j].getToken() =='X') {
+                if (player == "White") {
+                    if (board[i][j].getToken() =="White") {
                         count++;
                     } else {
                         count = 0;
                     }
-                } else if(player == 2) {
-                    if (board[i][j].getToken() == 'O') {
+                } else if(player == "Black") {
+                    if (board[i][j].getToken() == "Black") {
                         count++;
                     } else {
                         count = 0;
@@ -77,22 +77,22 @@ public class Board extends Application {
         return false;
     }
 
-    public boolean isVerticalWin(int player) {
+    public boolean isVerticalWin(String player) {
 
         int count = 0;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 for (int k = i + 1; k < board.length; k++) {
-                    if (player == 1) {
-                        if(board[i][j].getToken() == 'X' && board[k][j].getToken() == 'x') {
+                    if (player == "White") {
+                        if(board[i][j].getToken() == "White" && board[k][j].getToken() == "White") {
                             count++;
                         } else {
                             count = 0;
                         }
                     }
 
-                    if (player == 2) {
-                        if(board[i][j].getToken() == 'O' && board[k][j].getToken() == 'O') {
+                    if (player == "Black") {
+                        if(board[i][j].getToken() == "Black" && board[k][j].getToken() == "Black") {
                             count++;
                         } else {
                             count = 0;
@@ -109,7 +109,7 @@ public class Board extends Application {
     }
 
     public class Piece extends Pane {
-        private char token = ' ';
+        private String token = " ";
 
         public Piece() {
             setStyle("-fx-border-color: black");
@@ -117,14 +117,15 @@ public class Board extends Application {
             this.setOnMouseClicked(e -> handleMouseClick());
         }
 
-        public char getToken() {
+        public String getToken() {
             return token;
         }
 
-        public void setToken(char c) {
+        public void setToken(String c) {
             token = c;
 
-            if (token == 'X') {
+
+            if (token == "White") {
                 Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
                         this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
                 ellipse.centerXProperty().bind(this.widthProperty().divide(2));
@@ -135,7 +136,7 @@ public class Board extends Application {
                 ellipse.setFill(Color.WHITE);
 
                 getChildren().add(ellipse);
-            } else if (token == 'O') {
+            } else if (token == "Black") {
                 Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
                         this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
                 ellipse.centerXProperty().bind(this.widthProperty().divide(2));
@@ -151,19 +152,19 @@ public class Board extends Application {
 
 
         private void handleMouseClick() {
-            if (token == ' ' && whoseTurn != ' ') {
+            if (token == " " && whoseTurn != " ") {
                 setToken(whoseTurn);
 
                 if (hasPlayerWon(whoseTurn)) {
                     lblStatus.setText(whoseTurn + " won! The game is over");
-                    whoseTurn = ' ';
+                    whoseTurn = " ";
                 }
                 else if (isFull()) {
                     lblStatus .setText("Draw! The game is over");
-                    whoseTurn = ' ';
+                    whoseTurn = " ";
                 }
                 else {
-                    whoseTurn = (whoseTurn == 'X') ? 'O' : 'X';
+                    whoseTurn = (whoseTurn == "White") ? "Black" : "White";
                     lblStatus.setText(whoseTurn + "'s turn");
                 }
             }
