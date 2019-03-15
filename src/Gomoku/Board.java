@@ -41,10 +41,14 @@ public class Board extends Application {
         primaryStage.show();
     }
 
+    public void highlight(int[][] pieces) {
+      board[3][2].setStyle("-fx-background-color: yellow; -fx-border-color: black");
+    }
+
     public boolean isFull() {
         for (int i = 0; i < 3; i++) {
             for (int j=0; j < 3; j++) {
-                if (board[i][j].getToken() == " ")
+                if (board[i][j].getToken().equals(" "));
                     return false;
             }
         }
@@ -61,14 +65,14 @@ public class Board extends Application {
         for (int i = 0; i < board.length; i++) {
             int count = 0;
             for (int j = 0; j < board[i].length; j++) {
-                if (player == "White") {
-                    if (board[i][j].getToken() =="White") {
+                if (player.equals("White")) {
+                    if (board[i][j].getToken().equals("White")) {
                         count++;
                     } else {
                         count = 0;
                     }
-                } else if(player == "Black") {
-                    if (board[i][j].getToken() == "Black") {
+                } else if(player.equals("Black")) {
+                    if (board[i][j].getToken().equals("Black")) {
                         count++;
                     } else {
                         count = 0;
@@ -90,16 +94,16 @@ public class Board extends Application {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 for (int k = i + 1; k < board.length; k++) {
-                    if (player == "White") {
-                        if(board[i][j].getToken() == "White" && board[k][j].getToken() == "White") {
+                    if (player.equals("White")) {
+                        if(board[i][j].getToken().equals("White") && board[k][j].getToken().equals("White")) {
                             count++;
                         } else {
                             count = 0;
                         }
                     }
 
-                    if (player == "Black") {
-                        if(board[i][j].getToken() == "Black" && board[k][j].getToken() == "Black") {
+                    if (player.equals("Black")) {
+                        if(board[i][j].getToken().equals("Black") && board[k][j].getToken().equals("Black")) {
                             count++;
                         } else {
                             count = 0;
@@ -132,25 +136,26 @@ public class Board extends Application {
             token = c;
 
 
-            if (token == "White") {
+            if (token.equals("White")) {
                 Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
                         this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
                 ellipse.centerXProperty().bind(this.widthProperty().divide(2));
                 ellipse.centerYProperty().bind(this.heightProperty().divide(2));
-                ellipse.radiusXProperty().bind(this.widthProperty().divide(2).subtract(10));
-                ellipse.radiusYProperty().bind(this.heightProperty().divide(2).subtract(10));
+                ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
+                ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
                 ellipse.setStroke(Color.BLACK);
                 ellipse.setFill(Color.WHITE);
 
                 getChildren().add(ellipse);
-            } else if (token == "Black") {
+                highlight(new int[][]{{2,3}});
+            } else if (token.equals("Black")) {
                 Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
                         this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
                 ellipse.centerXProperty().bind(this.widthProperty().divide(2));
                 ellipse.centerYProperty().bind(this.heightProperty().divide(2));
-                ellipse.radiusXProperty().bind(this.widthProperty().divide(2).subtract(10));
-                ellipse.radiusYProperty().bind(this.heightProperty().divide(2).subtract(10));
-                ellipse.setStroke(Color.WHITE);
+                ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
+                ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
+
                 ellipse.setFill(Color.BLACK);
 
                 getChildren().add(ellipse);
@@ -159,19 +164,19 @@ public class Board extends Application {
 
 
         private void handleMouseClick() {
-            if (token == " " && whoseTurn != " ") {
+            if (token.equals(" ") && !" ".equals(whoseTurn)) {
                 setToken(whoseTurn);
 
                 if (hasPlayerWon(whoseTurn)) {
                     lblStatus.setText(whoseTurn + " won! The game is over");
-                    whoseTurn = " ";
+                    whoseTurn.equals(" ");
                 }
                 else if (isFull()) {
                     lblStatus .setText("Draw! The game is over");
-                    whoseTurn = " ";
+                    whoseTurn.equals(" ");
                 }
                 else {
-                    whoseTurn = (whoseTurn == "White") ? "Black" : "White";
+                    whoseTurn = (whoseTurn.equals("White")) ? "Black" : "White";
                     lblStatus.setText(whoseTurn + "'s turn");
                 }
             }
