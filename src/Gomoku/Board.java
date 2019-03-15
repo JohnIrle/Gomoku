@@ -18,6 +18,7 @@ public class Board extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         GridPane pane = new GridPane();
         for (int i = 0; i < 19; i++) {
             for (int j = 0; j < 19; j++) {
@@ -25,8 +26,9 @@ public class Board extends Application {
             }
         }
 
+
         pane.setPadding(new Insets(15,15,15,15));
-        pane.setStyle("-fx-background-color: beige");
+        pane.setStyle("-fx-background-color: tan");
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(pane);
@@ -35,6 +37,7 @@ public class Board extends Application {
         Scene scene = new Scene(borderPane, 600, 600);
         primaryStage.setTitle("Gomoku");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
@@ -116,8 +119,8 @@ public class Board extends Application {
         private String token = " ";
 
         public Piece() {
-            setStyle("-fx-border-color: black");
             this.setPrefSize(2000, 2000);
+            this.setStyle("-fx-border-color: black");
             this.setOnMouseClicked(e -> handleMouseClick());
         }
 
