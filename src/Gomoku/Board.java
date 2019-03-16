@@ -41,13 +41,13 @@ public class Board extends Application {
         primaryStage.show();
     }
 
-    public void highlight(int[][] pieces) {
-      board[3][2].setStyle("-fx-background-color: yellow; -fx-border-color: black");
+    private void highlight(Piece piece) {
+      piece.setStyle("-fx-background-color: yellow; -fx-border-color: black");
     }
 
-    public boolean isFull() {
-        for (int i = 0; i < 3; i++) {
-            for (int j=0; j < 3; j++) {
+    private boolean isFull() {
+        for (int i = 0; i < board.length; i++) {
+            for (int j=0; j < board[i].length; j++) {
                 if (board[i][j].getToken().equals(" "));
                     return false;
             }
@@ -56,63 +56,92 @@ public class Board extends Application {
         return true;
     }
 
-    public boolean hasPlayerWon(String player) {
-        return isHorizontalWin(player) || isVerticalWin(player);
+    private boolean hasPlayerWon(String player) {
+        return isHorizontalWin(player) || isVerticalWin(player) || isDiagonalWin(player);
 
     }
 
-    public boolean isHorizontalWin(String player) {
-        for (int i = 0; i < board.length; i++) {
-            int count = 0;
-            for (int j = 0; j < board[i].length; j++) {
-                if (player.equals("White")) {
-                    if (board[i][j].getToken().equals("White")) {
-                        count++;
-                    } else {
-                        count = 0;
-                    }
-                } else if(player.equals("Black")) {
-                    if (board[i][j].getToken().equals("Black")) {
-                        count++;
-                    } else {
-                        count = 0;
-                    }
-                }
+    private boolean isHorizontalWin(String player) {
 
-                if (count == 5) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length - 4; j++) {
+                if (board[i][j].getToken().equals(player)
+                        && board[i][j + 1].getToken().equals(player)
+                        && board[i][j + 2].getToken().equals(player)
+                        && board[i][j + 3].getToken().equals(player)
+                        && board[i][j + 4].getToken().equals(player)) {
+
+                    highlight(board[i][j]);
+                    highlight(board[i][j + 1]);
+                    highlight(board[i][j + 2]);
+                    highlight(board[i][j + 3]);
+                    highlight(board[i][j + 4]);
+                    return true;
+
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isVerticalWin(String player) {
+        for (int i = 0; i < board.length - 4; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j].getToken().equals(player)
+                        && board[i + 1][j].getToken().equals(player)
+                        && board[i + 2][j].getToken().equals(player)
+                        && board[i + 3][j].getToken().equals(player)
+                        && board[i + 4][j].getToken().equals(player)) {
+                    highlight(board[i][j]);
+                    highlight(board[i + 1][j]);
+                    highlight(board[i + 2][j]);
+                    highlight(board[i + 3][j]);
+                    highlight(board[i + 4][j]);
                     return true;
                 }
             }
         }
-
         return false;
     }
 
-    public boolean isVerticalWin(String player) {
+    private boolean isDiagonalWin(String player) {
+        return checkFirstDiagonal(player) || checkSecondDiagonal(player);
+    }
 
-        int count = 0;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                for (int k = i + 1; k < board.length; k++) {
-                    if (player.equals("White")) {
-                        if(board[i][j].getToken().equals("White") && board[k][j].getToken().equals("White")) {
-                            count++;
-                        } else {
-                            count = 0;
-                        }
-                    }
+    private boolean checkFirstDiagonal(String player) {
+        for (int i = 0; i < board.length - 4; i++) {
+            for (int j = 0; j < board[i].length - 4; j++) {
+                if (board[i][j].getToken().equals(player)
+                        && board[i + 1][j + 1].getToken().equals(player)
+                        && board[i + 2][j + 2].getToken().equals(player)
+                        && board[i + 3][j + 3].getToken().equals(player)
+                        && board[i + 4][j + 4].getToken().equals(player)) {
+                    highlight(board[i][j]);
+                    highlight(board[i + 1][j + 1]);
+                    highlight(board[i + 2][j + 2]);
+                    highlight(board[i + 3][j + 3]);
+                    highlight(board[i + 4][j + 4]);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-                    if (player.equals("Black")) {
-                        if(board[i][j].getToken().equals("Black") && board[k][j].getToken().equals("Black")) {
-                            count++;
-                        } else {
-                            count = 0;
-                        }
-                    }
-
-                    if(count == 4) {
-                        return true;
-                    }
+    private boolean checkSecondDiagonal(String player) {
+        for (int i = 0; i < board.length - 4; i++) {
+            for (int j = 4; j < board[i].length; j++) {
+                if (board[i][j].getToken().equals(player)
+                        && board[i + 1][j - 1].getToken().equals(player)
+                        && board[i + 2][j - 2].getToken().equals(player)
+                        && board[i + 3][j - 3].getToken().equals(player)
+                        && board[i + 4][j - 4].getToken().equals(player)) {
+                    highlight(board[i][j]);
+                    highlight(board[i + 1][j - 1]);
+                    highlight(board[i + 2][j - 2]);
+                    highlight(board[i + 3][j - 3]);
+                    highlight(board[i + 4][j - 4]);
+                    return true;
                 }
             }
         }
@@ -147,7 +176,6 @@ public class Board extends Application {
                 ellipse.setFill(Color.WHITE);
 
                 getChildren().add(ellipse);
-                highlight(new int[][]{{2,3}});
             } else if (token.equals("Black")) {
                 Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
                         this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
@@ -164,16 +192,16 @@ public class Board extends Application {
 
 
         private void handleMouseClick() {
-            if (token.equals(" ") && !" ".equals(whoseTurn)) {
+            if (token.equals(" ") && !whoseTurn.equals(" ")) {
                 setToken(whoseTurn);
 
                 if (hasPlayerWon(whoseTurn)) {
                     lblStatus.setText(whoseTurn + " won! The game is over");
-                    whoseTurn.equals(" ");
+                    whoseTurn = " ";
                 }
                 else if (isFull()) {
                     lblStatus .setText("Draw! The game is over");
-                    whoseTurn.equals(" ");
+                    whoseTurn = " ";
                 }
                 else {
                     whoseTurn = (whoseTurn.equals("White")) ? "Black" : "White";
