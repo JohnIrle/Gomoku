@@ -130,7 +130,7 @@ public class Board extends Application {
 
     private boolean checkSecondDiagonal(String player) {
         for (int i = 0; i < board.length - 4; i++) {
-            for (int j = 0; j < board[i].length; j++) {
+            for (int j = 4; j < board[i].length; j++) {
                 if (board[i][j].getToken().equals(player)
                         && board[i + 1][j - 1].getToken().equals(player)
                         && board[i + 2][j - 2].getToken().equals(player)
