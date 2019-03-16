@@ -1,4 +1,7 @@
 package Gomoku;
+// Gomoku
+// John Irle
+// March 15, 2019
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -8,10 +11,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 
 public class Board extends Application {
+
     private String whoseTurn = "White";
     private Piece[][] board = new Piece[19][19];
     private Label lblStatus = new Label("White's turn to play");
@@ -19,6 +26,7 @@ public class Board extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        // Initialize board
         GridPane pane = new GridPane();
         for (int i = 0; i < 19; i++) {
             for (int j = 0; j < 19; j++) {
@@ -26,7 +34,7 @@ public class Board extends Application {
             }
         }
 
-
+        // Style board
         pane.setPadding(new Insets(15,15,15,15));
         pane.setStyle("-fx-background-color: tan");
 
@@ -56,6 +64,7 @@ public class Board extends Application {
         return true;
     }
 
+    // Check all win conditions
     private boolean hasPlayerWon(String player) {
         return isHorizontalWin(player) || isVerticalWin(player) || isDiagonalWin(player);
 
@@ -161,8 +170,13 @@ public class Board extends Application {
             return token;
         }
 
+        // Draw a piece
         public void setToken(String c) {
             token = c;
+
+            RadialGradient white = new RadialGradient(0.5, 0.5,0, 0, 1.5,true, CycleMethod.REFLECT, new Stop(0, Color.WHITE), new Stop(1, Color.GREY));
+
+            RadialGradient black = new RadialGradient(0.5, 0.5,0, 0, 1.5,true, CycleMethod.REFLECT, new Stop(0, Color.DARKSLATEGRAY), new Stop(1, Color.BLACK));
 
 
             if (token.equals("White")) {
@@ -172,8 +186,8 @@ public class Board extends Application {
                 ellipse.centerYProperty().bind(this.heightProperty().divide(2));
                 ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
                 ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
-                ellipse.setStroke(Color.BLACK);
-                ellipse.setFill(Color.WHITE);
+                // ellipse.setStroke(Color.BLACK);
+                ellipse.setFill(white);
 
                 getChildren().add(ellipse);
             } else if (token.equals("Black")) {
@@ -184,13 +198,13 @@ public class Board extends Application {
                 ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
                 ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
 
-                ellipse.setFill(Color.BLACK);
+                ellipse.setFill(black);
 
                 getChildren().add(ellipse);
             }
         }
 
-
+        // Check for win, draw or continue on each click.
         private void handleMouseClick() {
             if (token.equals(" ") && !whoseTurn.equals(" ")) {
                 setToken(whoseTurn);
