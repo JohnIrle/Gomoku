@@ -186,7 +186,6 @@ public class Board extends Application {
                 ellipse.centerYProperty().bind(this.heightProperty().divide(2));
                 ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
                 ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
-                // ellipse.setStroke(Color.BLACK);
                 ellipse.setFill(white);
 
                 getChildren().add(ellipse);
