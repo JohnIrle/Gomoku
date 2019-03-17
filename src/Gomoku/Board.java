@@ -159,10 +159,17 @@ public class Board extends Application {
 
   public class Piece extends Pane {
     private String token = " ";
+    private Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
+            this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
+
 
     public Piece() {
       this.setPrefSize(2000, 2000);
       this.setStyle("-fx-border-color: black");
+      ellipse.centerXProperty().bind(this.widthProperty().divide(2));
+      ellipse.centerYProperty().bind(this.heightProperty().divide(2));
+      ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
+      ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
       this.setOnMouseClicked(e -> handleMouseClick());
     }
 
@@ -180,25 +187,10 @@ public class Board extends Application {
 
 
       if (token.equals("White")) {
-        Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
-                this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
-        ellipse.centerXProperty().bind(this.widthProperty().divide(2));
-        ellipse.centerYProperty().bind(this.heightProperty().divide(2));
-        ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
-        ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
         ellipse.setFill(white);
-
         getChildren().add(ellipse);
       } else if (token.equals("Black")) {
-        Ellipse ellipse = new Ellipse(this.getWidth() / 2, this.getHeight() / 2,
-                this.getWidth() / 2 - 10, this.getHeight() / 2 - 10);
-        ellipse.centerXProperty().bind(this.widthProperty().divide(2));
-        ellipse.centerYProperty().bind(this.heightProperty().divide(2));
-        ellipse.radiusXProperty().bind(this.widthProperty().divide(1.4).subtract(10));
-        ellipse.radiusYProperty().bind(this.heightProperty().divide(1.4).subtract(10));
-
         ellipse.setFill(black);
-
         getChildren().add(ellipse);
       }
     }
