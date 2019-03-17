@@ -6,9 +6,11 @@ package Gomoku;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -20,33 +22,66 @@ import javafx.stage.Stage;
 public class Board extends Application {
 
   private String whoseTurn = "White";
+  GridPane pane = new GridPane();
   private Piece[][] board = new Piece[19][19];
   private Label lblStatus = new Label("White's turn to play");
+  Button btnAgain = new Button("Play again?");
 
   @Override
   public void start(Stage primaryStage) {
 
     // Initialize board
-    GridPane pane = new GridPane();
-    for (int i = 0; i < 19; i++) {
-      for (int j = 0; j < 19; j++) {
-        pane.add(board[i][j] = new Piece(), j, i);
-      }
-    }
+    initializeBoard(pane);
 
     // Style board
     pane.setPadding(new Insets(15,15,15,15));
     pane.setStyle("-fx-background-color: tan");
 
+    btnAgain.managedProperty().bind(btnAgain.visibleProperty());
+    btnAgain.setVisible(false);
+    btnAgain.setOnMouseClicked(e -> handleAgain());
+
+    HBox status = new HBox(330);
+    status.getChildren().addAll(lblStatus, btnAgain);
+
     BorderPane borderPane = new BorderPane();
     borderPane.setCenter(pane);
-    borderPane.setBottom(lblStatus);
+    borderPane.setBottom(status);
 
     Scene scene = new Scene(borderPane, 600, 600);
     primaryStage.setTitle("Gomoku");
     primaryStage.setScene(scene);
     primaryStage.setResizable(false);
     primaryStage.show();
+  }
+
+  private void handleAgain() {
+    // Reset Turn
+    whoseTurn = "White";
+
+    // Clear the board
+    pane.getChildren().clear();
+
+    // Reset grid
+    initializeBoard(pane);
+
+    // Reset board state
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[i].length; j++) {
+        board[i][j].setToken(" ");
+      }
+    }
+
+    lblStatus.setText(whoseTurn + "'s turn");
+    btnAgain.setVisible(false);
+  }
+
+  private void initializeBoard(GridPane pane) {
+    for (int i = 0; i < 19; i++) {
+      for (int j = 0; j < 19; j++) {
+        pane.add(board[i][j] = new Piece(), j, i);
+      }
+    }
   }
 
   private void highlight(Piece piece) {
@@ -201,12 +236,14 @@ public class Board extends Application {
         setToken(whoseTurn);
 
         if (hasPlayerWon(whoseTurn)) {
-          lblStatus.setText(whoseTurn + " won! The game is over");
+          lblStatus.setText(whoseTurn + " won! The game is over.");
           whoseTurn = " ";
+          btnAgain.setVisible(true);
         }
         else if (isFull()) {
-          lblStatus .setText("Draw! The game is over");
+          lblStatus .setText("Draw! The game is over.");
           whoseTurn = " ";
+          btnAgain.setVisible(true);
         }
         else {
           whoseTurn = (whoseTurn.equals("White")) ? "Black" : "White";
